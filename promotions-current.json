@@ -1,0 +1,128 @@
+[
+  {
+    "id": "148",
+    "description": "Picanha Maturatta Peça À Vácuo Kg",
+    "price": "88,90",
+    "appprice": "",
+    "startdate": "2026-09-24",
+    "enddate": "2026-09-27",
+    "status": "active"
+  },
+  {
+    "id": "142",
+    "description": "Sabão Líquido Omo 3l",
+    "price": "29,99",
+    "appprice": "",
+    "startdate": "2026-09-21",
+    "enddate": "2026-09-27",
+    "status": "active"
+  },
+  {
+    "id": "118",
+    "description": "Maionese Hellmann’s Tradicional 500g",
+    "price": "8,99",
+    "appprice": "",
+    "startdate": "2026-09-24",
+    "enddate": "2026-09-27",
+    "status": "active"
+  },
+  {
+    "id": "107",
+    "description": "Café Pilão Tradicional 500g",
+    "price": "25,79",
+    "appprice": "",
+    "startdate": "2026-09-21",
+    "enddate": "2026-09-27",
+    "status": "active"
+  },
+  {
+    "id": "100",
+    "description": "Sabão Em Pó Tixan Cartucho 2,2Kg",
+    "price": "19,99",
+    "appprice": "",
+    "startdate": "2026-09-24",
+    "enddate": "2026-09-27",
+    "status": "active"
+  },
+  {
+    "id": "97",
+    "description": "Feijão Preto Kicaldo Kg",
+    "price": "6,99",
+    "appprice": "",
+    "startdate": "2026-09-21",
+    "enddate": "2026-09-27",
+    "status": "active"
+  },
+  {
+    "id": "80",
+    "description": "Contra Filé Bovino Peça À Vácuo Kg",
+    "price": "49,99",
+    "appprice": "",
+    "startdate": "2026-09-24",
+    "enddate": "2026-09-27",
+    "status": "active"
+  },
+  {
+    "id": "31",
+    "description": "Arroz Parboilizado Sul Rio T1 5Kg",
+    "price": "19,99",
+    "appprice": "",
+    "startdate": "2026-09-21",
+    "enddate": "2026-09-27",
+    "status": "active"
+  },
+  {
+    "id": "30",
+    "description": "Arroz Branco Sul Rio T1 5Kg",
+    "price": "19,99",
+    "appprice": "",
+    "startdate": "2026-09-21",
+    "enddate": "2026-09-27",
+    "status": "active"
+  },
+  {
+    "id": "27",
+    "description": "Filé de Peito de Frango Envelopado Congelado Kg",
+    "price": "15,97",
+    "appprice": "",
+    "startdate": "2026-09-21",
+    "enddate": "2026-09-27",
+    "status": "active"
+  },
+  {
+    "id": "16",
+    "description": "Texas Burguer Seara Caixeta 672g",
+    "price": "13,97",
+    "appprice": "",
+    "startdate": "2026-09-21",
+    "enddate": "2026-09-27",
+    "status": "active"
+  },
+  {
+    "id": "13",
+    "description": "Linguiça Suína Seara Kg",
+    "price": "13,97",
+    "appprice": "",
+    "startdate": "2026-09-24",
+    "enddate": "2026-09-27",
+    "status": "active"
+  },
+  {
+    "id": "11",
+    "description": "Filé de Peito de Frango Rivelli Bandeja 1Kg ",
+    "price": "15,97",
+    "appprice": "",
+    "startdate": "2026-09-21",
+    "enddate": "2026-09-27",
+    "status": "active"
+  },
+  {
+    "id": "7",
+    "description": "Coxa C/Sobrecoxa de Frango C/ Dorso Congelada Kg",
+    "price": "6,99",
+    "appprice": "",
+    "startdate": "2026-09-21",
+    "enddate": "2026-09-27",
+    "status": "active"
+  }
+]

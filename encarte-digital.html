@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101c26">
+  <meta name="description" content="Explore as ofertas do Supermercados Rio Sul e prepare sua lista de compras para usar na loja.">
+  <title>Encarte digital e lista de compras | Rio Sul</title>
+  <link rel="icon" type="image/png" href="assets/rio-sul-favicon.png">
+  <link rel="apple-touch-icon" href="assets/rio-sul-favicon.png">
+  <link rel="stylesheet" href="pages.css">
+  <script defer src="assets/pdf-lib.min.js"></script>
+  <script defer src="encarte-digital.js"></script>
+</head>
+<body>
+  <header class="page-header">
+    <a class="page-logo" href="index.html" aria-label="Rio Sul, voltar à página inicial"><img src="assets/rio-sul-logo-header.png" alt="Supermercados Rio Sul" width="2172" height="724"></a>
+    <nav class="page-nav" aria-label="Navegação principal"><a href="index.html">Início</a><a class="active" href="encarte-digital.html" aria-current="page">Encarte digital</a><a href="lojas.html">Nossas lojas</a></nav>
+    <button class="list-trigger" id="openList" type="button">♡ Minha lista <span id="listCount">0</span></button>
+  </header>
+
+  <main>
+    <section class="catalog-hero">
+      <div class="hero-glow"></div>
+      <div class="catalog-hero-inner">
+        <div><p class="eyebrow-light">Encarte digital · Setembro 2026</p><h1>Seu roteiro de compras começa <em>aqui.</em></h1><p>Explore ofertas reais, escolha os favoritos e leve uma lista pronta para a loja. Sem carrinho, sem cadastro.</p><div class="hero-actions"><a class="solid-link" href="#ofertas">Explorar ofertas <span aria-hidden="true">↗</span></a><a class="ghost-link" href="encarte-rio-sul.pdf" target="_blank" rel="noopener">Ver encarte original</a></div></div>
+        <div class="hero-flyer" aria-hidden="true"><img src="assets/encarte-rio-sul-01.webp" alt="" width="1531" height="1701"><span>01 — 30 SET</span></div>
+      </div>
+      <div class="catalog-facts"><span><strong>01 a 30/09</strong> validade do encarte</span><span><strong>PDF + notas</strong> sua lista, do seu jeito</span><span><strong>64 lojas</strong> para visitar</span></div>
+    </section>
+
+    <section class="catalog-intro" id="ofertas"><div><p class="eyebrow-dark">Curadoria para sua visita</p><h2>Ofertas para escolher com calma.</h2><p>Seleção digital conferida no encarte enviado. Preços e datas aparecem em cada item; confira condições e disponibilidade no PDF original e na loja.</p></div><a class="text-link" href="lojas.html">Encontrar uma loja próxima ↗</a></section>
+
+    <section class="offer-zone" aria-label="Ofertas do encarte"><div class="offer-toolbar"><label class="search-field"><span aria-hidden="true">⌕</span><input id="offerSearch" type="search" placeholder="Buscar produto ou marca" aria-label="Buscar ofertas"></label><label class="sort-field">Ordenar <select id="offerSort" aria-label="Ordenar ofertas"><option value="featured">Destaques</option><option value="price-asc">Menor preço</option><option value="price-desc">Maior preço</option><option value="name">Nome</option></select></label></div><div class="category-pills" id="categories" aria-label="Categorias"></div><div class="section-line"><div><h2 id="resultTitle">Encarte de setembro</h2><p id="resultSubtitle">Ofertas selecionadas do PDF original.</p></div><span id="resultCount" class="result-count"></span></div><div class="offers-grid" id="offersGrid"></div><p class="empty-message" id="emptyOffers" hidden>Nenhuma oferta encontrada. Tente outra busca ou categoria.</p></section>
+
+    <section class="catalog-note"><div><span class="note-ornament">✳</span><p class="eyebrow-dark">Do encarte à sua rotina</p><h2>Uma lista feita para a visita.</h2><p>Marque os produtos, ajuste quantidades e salve em PDF ou texto. No celular, você também pode abrir o menu de compartilhamento para guardar nas Notas ou mandar a lista para sua conversa no WhatsApp.</p><button class="dark-button" id="openListBottom" type="button">Abrir minha lista ↗</button></div><img src="assets/encarte-rio-sul-08.webp" alt="Última página do encarte Rio Sul de setembro" width="1531" height="1701" loading="lazy"></section>
+  </main>
+
+  <div class="drawer-scrim" id="drawerScrim" hidden></div>
+  <aside class="list-drawer" id="listDrawer" aria-label="Minha lista de compras" aria-hidden="true" inert><div class="drawer-head"><div><p class="eyebrow-dark">Para comprar na loja</p><h2>Minha lista <span id="drawerCount">0</span></h2></div><button class="icon-close" id="closeList" type="button" aria-label="Fechar lista">×</button></div><p class="drawer-caption">Seus itens ficam salvos neste navegador. A lista mostra os preços anunciados e a validade de cada promoção.</p><div class="selected-items" id="selectedItems"></div><p class="empty-list" id="emptyList">Sua lista ainda está vazia. Toque no coração de uma oferta para começar.</p><div class="drawer-footer"><div class="list-total"><span>Total estimado</span><strong id="listTotal">R$ 0,00</strong></div><p>O preço final e a disponibilidade devem ser confirmados na loja.</p><div class="export-buttons"><button id="downloadPdf" type="button">Baixar PDF</button><button id="shareNotes" type="button">Salvar nas Notas / texto</button><button id="shareWhatsapp" type="button">Enviar ao meu WhatsApp</button></div><p class="share-tip">No WhatsApp, escolha a conversa “Mensagem para você”.</p><div class="status-message" id="listStatus" role="status" aria-live="polite"></div></div></aside>
+
+  <footer class="page-footer"><a href="index.html">Rio Sul Supermercados</a><span>Ofertas sujeitas à validade e disponibilidade.</span><a href="lojas.html">Encontrar loja ↗</a></footer>
+</body>
+</html>

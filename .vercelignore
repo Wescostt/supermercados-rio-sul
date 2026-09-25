@@ -1,0 +1,11 @@
+.file-versions
+.od-frames
+.od-skills
+.git
+.github
+.vercel
+node_modules
+.env
+.env.*
+*.artifact.json
+*.zip

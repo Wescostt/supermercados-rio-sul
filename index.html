@@ -1,0 +1,1302 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Supermercados Rio Sul — Experiência Premium</title>
+  <meta name="description" content="Supermercados Rio Sul em uma experiência digital premium, com arquitetura imersiva, promoções editoriais e seleção ampla de produtos.">
+  <link rel="preload" as="image" href="assets/rio-sul-logo.webp">
+  <link rel="preload" as="image" href="assets/hero-rio-sul-fachada.webp">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syne:wght@400;700;800;900&display=swap');
+
+    /* OD-LAYOUT-PRIMITIVES v1 — structure only: display, flex/grid, overflow, wrapping, ratio.
+       Put this @layer first; product CSS outside the layer always wins. */
+    @layer od-layout {
+      :where(.od-stack,.od-row,.od-row-top,.od-cluster,.od-grid,.od-field,.od-stat,.od-cell,.od-tile) > :where(*) { min-width: 0; }
+      .od-stack { display: flex; flex-direction: column; gap: var(--od-gap, 8px); }
+      .od-row { display: flex; align-items: center; gap: var(--od-gap, 8px); }
+      .od-row-top { display: flex; align-items: flex-start; gap: var(--od-gap, 8px); }
+      .od-cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--od-gap, 8px); }
+      .od-fill { flex: 1 1 0; min-width: 0; }
+      .od-fixed { flex: none; }
+      .od-grid { display: grid; gap: var(--od-gap, 12px); grid-template-columns: repeat(var(--od-cols, 3), minmax(0, 1fr)); }
+      .od-stat, .od-field, .od-cell { display: grid; gap: var(--od-gap, 2px); }
+      :where(.od-stat,.od-field,.od-cell) > :where(*) { display: block; }
+      .od-tile { display: grid; grid-template-rows: auto 1fr; }
+      :where(.od-tile) > :where(*) { display: block; }
+      .od-media { display: block; width: 100%; height: auto; aspect-ratio: var(--od-ratio, auto); }
+      .od-media-cover { object-fit: cover; }
+      .od-truncate { display: block; max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+      .od-clamp-2, .od-clamp-3 { display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
+      .od-clamp-2 { -webkit-line-clamp: 2; }
+      .od-clamp-3 { -webkit-line-clamp: 3; }
+      .od-lines-2 { min-height: calc(2 * 1.4em); }
+      .od-nowrap { white-space: nowrap; }
+      .od-keep { word-break: keep-all; overflow-wrap: anywhere; }
+      .od-screen { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; height: 100%; }
+      .od-scroll { overflow-y: auto; overscroll-behavior: contain; min-height: 0; }
+      .od-rail { display: flex; gap: var(--od-gap, 8px); overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; padding-inline: var(--od-rail-pad, 16px); scroll-padding-inline: var(--od-rail-pad, 16px); }
+      .od-rail::-webkit-scrollbar { display: none; }
+      :where(.od-rail) > :where(*) { flex: none; scroll-snap-align: start; }
+      :where(.od-rail) > :where(:last-child) { margin-inline-end: var(--od-rail-pad, 16px); }
+      .od-spacer { flex: none; visibility: hidden; pointer-events: none; }
+      .od-touch { min-width: 44px; min-height: 44px; }
+    }
+    /* /OD-LAYOUT-PRIMITIVES v1 */
+
+    :root {
+      --paper: #f7f1df;
+      --sun: #f6d600;
+      --ink: #07111e;
+      --ink-soft: #1a2533;
+      --green: #142f24;
+      --deep: #0b1413;
+      --blue: #0d356b;
+      --red: #b42128;
+      --line: rgba(7, 17, 30, 0.14);
+      --white: #fffaf0;
+      --muted: rgba(255, 250, 240, 0.72);
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --section-pad: clamp(72px, 9vw, 136px);
+      --side: clamp(24px, 5vw, 80px);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--paper); }
+    body {
+      margin: 0;
+      overflow-x: clip;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      text-rendering: geometricPrecision;
+    }
+    body.menu-open { overflow: hidden; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; color: inherit; }
+    ::selection { background: var(--sun); color: var(--ink); }
+
+    .preloader {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--green);
+      color: var(--white);
+      transform: translateY(0);
+      transition: transform 1.5s cubic-bezier(0.45, 0, 0.15, 1);
+    }
+    .preloader.lift { transform: translateY(-100%); }
+    .preloader.done { transition: none; transform: translateY(-100%); pointer-events: none; }
+    .typewriter {
+      display: inline-flex;
+      align-items: center;
+      font-family: Syne, sans-serif;
+      font-size: 2.6rem;
+      letter-spacing: -0.02em;
+      min-height: 1.2em;
+    }
+    .typewriter span { font-weight: 700; }
+    .typewriter span:last-of-type { font-weight: 900; }
+    .cursor {
+      width: 3px;
+      height: 1.1em;
+      margin-left: 8px;
+      border-radius: 99px;
+      background: currentColor;
+      animation: blink 0.7s step-end infinite;
+    }
+    .cursor.hide { opacity: 0; animation: none; }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .site-nav {
+      position: fixed;
+      z-index: 50;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: clamp(18px, 2.4vw, 28px) var(--side);
+      color: var(--green);
+      transition: color 0.35s ease;
+      mix-blend-mode: normal;
+    }
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+      color: inherit;
+    }
+    .brand-emblem {
+      width: clamp(112px, 14vw, 190px);
+      height: auto;
+      filter: drop-shadow(0 10px 22px rgba(0,0,0,0.20));
+    }
+    .brand-word {
+      font-family: Syne, sans-serif;
+      font-size: clamp(16px, 1.4vw, 20px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: clamp(18px, 2vw, 34px);
+      font-family: Syne, sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    .nav-links a {
+      position: relative;
+      padding: 10px 0;
+    }
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: 4px;
+      width: 0;
+      height: 1px;
+      background: currentColor;
+      transition: width 0.28s ease;
+    }
+    .nav-links a:hover::after,
+    .nav-links a:focus-visible::after { left: 0; right: auto; width: 100%; }
+    .menu-toggle {
+      display: none;
+      width: 48px;
+      height: 48px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+    }
+    .hamburger {
+      width: 28px;
+      display: grid;
+      gap: 8px;
+    }
+    .hamburger i {
+      display: block;
+      height: 1px;
+      background: currentColor;
+      transition: width 0.25s ease, transform 0.25s ease;
+    }
+    .hamburger i:first-child { width: 28px; }
+    .hamburger i:last-child { width: 22px; justify-self: end; }
+    .menu-toggle:hover .hamburger i:first-child { width: 20px; }
+    .menu-toggle[aria-expanded="true"] .hamburger i:first-child { width: 26px; transform: translateY(4.5px) rotate(45deg); }
+    .menu-toggle[aria-expanded="true"] .hamburger i:last-child { width: 26px; transform: translateY(-4.5px) rotate(-45deg); }
+    .mobile-menu {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: grid;
+      place-items: center;
+      background: var(--paper);
+      color: var(--ink);
+      transform: translateY(-100%);
+      transition: transform 0.6s var(--ease);
+    }
+    .mobile-menu.open { transform: translateY(0); }
+    .mobile-menu nav {
+      display: grid;
+      gap: 22px;
+      text-align: center;
+      font-family: Syne, sans-serif;
+      font-size: clamp(34px, 10vw, 68px);
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      isolation: isolate;
+      display: grid;
+      align-items: end;
+      overflow: visible;
+      background:
+        linear-gradient(90deg, rgba(247,241,223,0.86) 0%, rgba(247,241,223,0.50) 38%, rgba(247,241,223,0.10) 70%),
+        url("assets/hero-rio-sul-fachada.webp") center / cover no-repeat;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: radial-gradient(circle at 72% 48%, rgba(246,214,0,0.26), transparent 33%), linear-gradient(180deg, transparent 55%, var(--paper) 100%);
+      pointer-events: none;
+    }
+    .hero-text-block {
+      width: 100%;
+      padding: calc(22vh - 30px) var(--side) clamp(88px, 12vh, 144px);
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s var(--ease) 0.1s, transform 0.7s var(--ease) 0.1s;
+    }
+    .hero-text-block.show { opacity: 1; transform: translateY(0); }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      color: var(--green);
+      font-family: Syne, sans-serif;
+      font-size: clamp(12px, 1vw, 15px);
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 44px;
+      height: 2px;
+      background: currentColor;
+    }
+    .hero-heading-top {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: -0.04em;
+    }
+    .hero-own-the,
+    .hero-extraordinary {
+      font-family: Syne, sans-serif;
+      font-weight: 800;
+      color: var(--ink);
+      text-transform: uppercase;
+      letter-spacing: -0.055em;
+      line-height: 0.9;
+    }
+    .hero-own-the { font-size: clamp(38px, 5vw, 86px); }
+    .hero-extraordinary {
+      display: block;
+      margin: 0;
+      font-size: clamp(54px, 9.4vw, 164px);
+      white-space: nowrap;
+    }
+    .hero-subtitle-desktop {
+      max-width: 330px;
+      margin: 0 0 0.5em;
+      color: rgba(7, 17, 30, 0.72);
+      font-family: Syne, sans-serif;
+      font-size: clamp(11px, 0.95vw, 15px);
+      font-weight: 700;
+      line-height: 1.6;
+      text-align: right;
+      letter-spacing: 0.02em;
+    }
+    .hero-subtitle-mobile {
+      display: none;
+      max-width: 340px;
+      margin: 18px 0 0;
+      color: rgba(7, 17, 30, 0.72);
+      font-family: Syne, sans-serif;
+      font-size: clamp(13px, 3vw, 16px);
+      font-weight: 700;
+      line-height: 1.55;
+    }
+    .hero-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px;
+      margin-top: 34px;
+    }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 14px 22px;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      font-family: Syne, sans-serif;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+    }
+    .button.primary { background: var(--ink); color: var(--white); border-color: var(--ink); }
+    .button.secondary { color: var(--ink); background: rgba(255, 250, 240, 0.55); backdrop-filter: blur(12px); }
+    .button:hover,
+    .button:focus-visible { transform: translateY(-2px); }
+    .button:focus-visible,
+    .menu-toggle:focus-visible,
+    a:focus-visible { outline: 2px solid var(--sun); outline-offset: 4px; }
+
+    .floating-logo-card {
+      position: fixed;
+      z-index: 22;
+      pointer-events: none;
+      left: 50%;
+      bottom: 5vh;
+      width: min(72vw, 760px);
+      transform: translate3d(-50%, 102vh, 0);
+      opacity: 0;
+      transition: transform 1.5s cubic-bezier(0.45, 0, 0.15, 1) 0.4s, opacity 0.8s ease 0.4s;
+      will-change: transform, opacity;
+    }
+    .floating-logo-card.lifting {
+      transform: translate3d(-50%, 0, 0);
+      opacity: 0.92;
+    }
+    .floating-logo-card.scroll-control { transition: none; }
+    .floating-logo-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 24px 48px rgba(0,0,0,0.30));
+    }
+
+    .intro-band {
+      position: relative;
+      z-index: 20;
+      min-height: 112vh;
+      padding: var(--section-pad) var(--side);
+      background: var(--deep);
+      color: var(--white);
+      overflow: hidden;
+    }
+    .intro-band::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(11,20,19,0.92), rgba(11,20,19,0.54)),
+        url("assets/slide-esperanca-06.webp") center / cover no-repeat;
+      opacity: 0.42;
+      transform: scale(1.05);
+    }
+    .intro-content {
+      position: relative;
+      max-width: 1220px;
+      margin: 0 auto;
+      padding-left: min(24vw, 280px);
+    }
+    .statement {
+      margin: 0;
+      color: #f4ead5;
+      font-size: clamp(28px, 4.1vw, 72px);
+      line-height: 1.12;
+      letter-spacing: -0.05em;
+      font-weight: 300;
+    }
+    .statement strong {
+      font-family: Syne, sans-serif;
+      font-weight: 800;
+      color: var(--sun);
+    }
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0;
+      margin-top: clamp(48px, 7vw, 92px);
+      border-top: 1px solid rgba(255,255,255,0.18);
+      border-bottom: 1px solid rgba(255,255,255,0.18);
+    }
+    .stat {
+      padding: clamp(22px, 3vw, 38px);
+      border-left: 1px solid rgba(255,255,255,0.18);
+    }
+    .stat:first-child { border-left: 0; }
+    .stat-value {
+      color: var(--white);
+      font-size: clamp(42px, 5vw, 82px);
+      font-weight: 300;
+      line-height: 1;
+      letter-spacing: -0.05em;
+    }
+    .stat-label {
+      margin-top: 10px;
+      color: rgba(255,250,240,0.66);
+      font-size: clamp(12px, 1.1vw, 15px);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .promos {
+      position: relative;
+      z-index: 25;
+      margin-top: -18vh;
+      padding: var(--section-pad) var(--side);
+      background: var(--paper);
+    }
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 32px;
+      max-width: 1280px;
+      margin: 0 auto clamp(32px, 5vw, 68px);
+    }
+    .section-kicker {
+      margin: 0 0 12px;
+      color: var(--green);
+      font-family: Syne, sans-serif;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    .section-title {
+      max-width: 820px;
+      margin: 0;
+      font-family: Syne, sans-serif;
+      font-size: clamp(38px, 6vw, 96px);
+      font-weight: 800;
+      line-height: 0.94;
+      letter-spacing: -0.06em;
+      text-transform: uppercase;
+    }
+    .section-copy {
+      max-width: 380px;
+      margin: 0;
+      color: rgba(7,17,30,0.68);
+      font-size: clamp(15px, 1.25vw, 18px);
+      line-height: 1.65;
+    }
+    .promo-grid {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: clamp(16px, 2vw, 28px);
+    }
+    .feature-promo,
+    .small-promo {
+      position: relative;
+      overflow: hidden;
+      min-height: 520px;
+      border-radius: 28px;
+      color: var(--white);
+      background: var(--deep);
+      box-shadow: 0 28px 80px rgba(7, 17, 30, 0.18);
+    }
+    .small-promo { min-height: 250px; }
+    .promo-stack { display: grid; gap: clamp(16px, 2vw, 28px); }
+    .promo-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.72;
+      transition: transform 0.8s var(--ease), opacity 0.8s ease;
+    }
+    .feature-promo:hover .promo-img,
+    .small-promo:hover .promo-img { transform: scale(1.045); opacity: 0.86; }
+    .promo-shade {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.72));
+    }
+    .promo-content {
+      position: absolute;
+      left: clamp(24px, 3vw, 44px);
+      right: clamp(24px, 3vw, 44px);
+      bottom: clamp(24px, 3vw, 44px);
+      display: grid;
+      gap: 14px;
+    }
+    .badge {
+      width: max-content;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(246,214,0,0.95);
+      color: var(--ink);
+      font-family: Syne, sans-serif;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .promo-title {
+      margin: 0;
+      max-width: 650px;
+      font-family: Syne, sans-serif;
+      font-size: clamp(30px, 5vw, 80px);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -0.055em;
+      text-transform: uppercase;
+    }
+    .small-promo .promo-title { font-size: clamp(24px, 2.4vw, 42px); }
+    .promo-text {
+      max-width: 520px;
+      margin: 0;
+      color: rgba(255,250,240,0.80);
+      line-height: 1.6;
+    }
+    .encarte-showcase {
+      max-width: 1280px;
+      margin: clamp(24px, 4vw, 52px) auto 0;
+      display: grid;
+      grid-template-columns: minmax(280px, 0.78fr) 1fr;
+      gap: clamp(18px, 3vw, 40px);
+      align-items: stretch;
+    }
+    .encarte-cover,
+    .encarte-page {
+      overflow: hidden;
+      border-radius: 22px;
+      background: #fffaf0;
+      box-shadow: 0 22px 70px rgba(7, 17, 30, 0.16);
+    }
+    .encarte-cover img,
+    .encarte-page img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1531 / 1701;
+      object-fit: contain;
+    }
+    .encarte-copy {
+      display: grid;
+      align-content: center;
+      gap: 18px;
+      padding: clamp(24px, 4vw, 52px);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: rgba(255, 250, 240, 0.56);
+    }
+    .encarte-copy h3 {
+      margin: 0;
+      font-family: Syne, sans-serif;
+      font-size: clamp(34px, 5vw, 76px);
+      font-weight: 800;
+      line-height: 0.94;
+      letter-spacing: -0.06em;
+      text-transform: uppercase;
+    }
+    .encarte-copy p {
+      max-width: 560px;
+      margin: 0;
+      color: rgba(7,17,30,0.68);
+      font-size: clamp(15px, 1.2vw, 18px);
+      line-height: 1.65;
+    }
+    .encarte-rail {
+      --od-gap: 14px;
+      --od-rail-pad: 0px;
+      grid-column: 1 / -1;
+      padding: 8px 0 18px;
+    }
+    .encarte-page {
+      width: min(34vw, 250px);
+      min-width: 172px;
+    }
+
+    .products {
+      padding: var(--section-pad) 0;
+      background: #101817;
+      color: var(--white);
+      overflow: hidden;
+    }
+    .products .section-head { padding: 0 var(--side); }
+    .products .section-kicker { color: var(--sun); }
+    .products .section-copy { color: rgba(255,250,240,0.68); }
+    .ticker {
+      display: flex;
+      width: max-content;
+      margin-bottom: clamp(34px, 5vw, 70px);
+      animation: ticker 38s linear infinite;
+      pointer-events: none;
+    }
+    .ticker span {
+      padding-right: 0.28em;
+      color: rgba(255,250,240,0.08);
+      font-family: Syne, sans-serif;
+      font-size: clamp(96px, 15vw, 220px);
+      font-weight: 800;
+      letter-spacing: -0.06em;
+      line-height: 0.8;
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
+    @keyframes ticker { to { transform: translateX(-50%); } }
+    .product-gallery {
+      display: flex;
+      gap: 8px;
+      width: min(1200px, calc(100% - var(--side) * 2));
+      height: min(68vh, 680px);
+      margin: 0 auto;
+    }
+    .product-card {
+      position: relative;
+      flex: 1 1 0%;
+      overflow: hidden;
+      min-width: 0;
+      border-radius: 18px;
+      background: #213138;
+      cursor: pointer;
+      transition: flex 0.55s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s ease;
+    }
+    .product-card:hover,
+    .product-card:focus-within { flex: 3.8; }
+    .product-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      opacity: 0.78;
+      transition: opacity 0.4s ease, transform 0.7s var(--ease);
+    }
+    .product-card:hover img,
+    .product-card:focus-within img { opacity: 0.94; transform: scale(1.04); }
+    .product-info {
+      position: absolute;
+      inset: auto 18px 18px 18px;
+      display: grid;
+      gap: 8px;
+      min-width: 220px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .product-card:hover .product-info,
+    .product-card:focus-within .product-info { opacity: 1; transform: translateY(0); }
+    .product-info h3 {
+      margin: 0;
+      font-family: Syne, sans-serif;
+      font-size: clamp(24px, 2.4vw, 42px);
+      letter-spacing: -0.04em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    .product-info p {
+      margin: 0;
+      color: rgba(255,250,240,0.78);
+      line-height: 1.5;
+    }
+    .product-index {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,0.34);
+      border-radius: 999px;
+      color: var(--white);
+      font-family: Syne, sans-serif;
+      font-size: 0.72rem;
+      font-weight: 800;
+    }
+
+    .experience {
+      padding: var(--section-pad) var(--side);
+      background: var(--paper);
+    }
+    .experience-grid {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: clamp(32px, 6vw, 90px);
+      align-items: center;
+    }
+    .experience-image {
+      position: relative;
+      overflow: hidden;
+      border-radius: 32px;
+      background: var(--green);
+      box-shadow: 0 28px 90px rgba(7,17,30,0.16);
+    }
+    .experience-image img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1672 / 941;
+      object-fit: cover;
+    }
+    .service-list {
+      display: grid;
+      gap: 16px;
+      margin-top: 30px;
+    }
+    .service-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 18px;
+      align-items: start;
+      padding: 22px 0;
+      border-top: 1px solid var(--line);
+    }
+    .service-item:last-child { border-bottom: 1px solid var(--line); }
+    .service-number {
+      color: var(--red);
+      font-family: Syne, sans-serif;
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+    .service-item h3 {
+      margin: 0 0 6px;
+      font-family: Syne, sans-serif;
+      font-size: clamp(20px, 2vw, 30px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+    }
+    .service-item p {
+      margin: 0;
+      color: rgba(7,17,30,0.64);
+      line-height: 1.65;
+    }
+
+    .final-cta {
+      position: relative;
+      padding: var(--section-pad) var(--side);
+      overflow: hidden;
+      background: var(--sun);
+      color: var(--ink);
+    }
+    .final-cta::after {
+      content: "Rio Sul   Rio Sul   Rio Sul";
+      position: absolute;
+      left: -2vw;
+      bottom: -0.18em;
+      color: rgba(7,17,30,0.07);
+      font-family: Syne, sans-serif;
+      font-size: clamp(90px, 18vw, 260px);
+      font-weight: 900;
+      letter-spacing: -0.08em;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    .cta-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 28px;
+      align-items: end;
+    }
+    .cta-inner h2 {
+      margin: 0;
+      max-width: 860px;
+      font-family: Syne, sans-serif;
+      font-size: clamp(46px, 8vw, 130px);
+      line-height: 0.88;
+      letter-spacing: -0.07em;
+      text-transform: uppercase;
+    }
+    .cta-inner p {
+      max-width: 380px;
+      margin: 18px 0 0;
+      font-size: clamp(16px, 1.2vw, 19px);
+      line-height: 1.55;
+    }
+    .footer {
+      padding: 34px var(--side);
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      background: var(--ink);
+      color: rgba(255,250,240,0.72);
+      font-size: 0.86rem;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity 0.75s var(--ease), transform 0.75s var(--ease);
+    }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 1023px) {
+      .nav-links { display: none; }
+      .menu-toggle { display: flex; }
+      .hero { min-height: 92vh; align-items: center; }
+      .hero-text-block { padding-top: 110px; padding-bottom: 84px; }
+      .hero-heading-top { justify-content: flex-start; }
+      .hero-subtitle-desktop { display: none; }
+      .hero-subtitle-mobile { display: block; }
+      .hero-own-the { font-size: 7vw; }
+      .hero-extraordinary { font-size: 13.2vw; white-space: normal; word-break: break-word; line-height: 0.9; }
+      .floating-logo-card { width: min(88vw, 600px); }
+      .intro-content { padding-left: 12vw; }
+      .promo-grid,
+      .encarte-showcase,
+      .experience-grid,
+      .cta-inner { grid-template-columns: 1fr; }
+      .product-gallery {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        height: auto;
+      }
+      .product-card { min-height: 340px; flex: none; }
+      .product-card:hover,
+      .product-card:focus-within { flex: none; transform: translateY(-3px); }
+      .product-info { opacity: 1; transform: none; min-width: 0; }
+    }
+
+    @media (max-width: 767px) {
+      :root { --side: 20px; }
+      .brand-emblem { width: 118px; }
+      .brand-word { display: none; }
+      .hero { background-position: 61% center; }
+      .hero-text-block { padding-top: 96px; }
+      .hero-own-the { font-size: 8.2vw; }
+      .hero-extraordinary { font-size: 15vw; }
+      .hero-cta-row { align-items: stretch; flex-direction: column; max-width: 320px; }
+      .intro-band { min-height: auto; }
+      .intro-content { padding-left: 0; }
+      .statement { font-size: clamp(29px, 8.6vw, 48px); }
+      .stats-row { grid-template-columns: 1fr; }
+      .stat,
+      .stat:first-child { border-left: 0; border-top: 1px solid rgba(255,255,255,0.18); }
+      .stat:first-child { border-top: 0; }
+      .section-head { display: grid; }
+      .feature-promo,
+      .small-promo { min-height: 380px; border-radius: 22px; }
+      .encarte-copy { padding: 24px; }
+      .encarte-page { width: min(72vw, 260px); }
+      .product-gallery { grid-template-columns: 1fr; }
+      .product-card { min-height: 420px; }
+      .footer { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+      .preloader { display: none; }
+      .hero-text-block,
+      .reveal { opacity: 1; transform: none; }
+      .floating-logo-card { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="preloader" id="preloader" aria-hidden="true">
+    <div class="typewriter" aria-label="Rio Sul"><span id="typed"></span><i class="cursor" id="cursor"></i></div>
+  </div>
+
+  <header class="site-nav" id="siteNav">
+    <a class="brand-mark" href="#top" aria-label="Supermercados Rio Sul — início">
+      <img class="brand-emblem" src="assets/rio-sul-logo.webp" width="2172" height="724" alt="Logotipo Supermercados Rio Sul">
+      <span class="brand-word">Supermercados</span>
+    </a>
+    <nav class="nav-links" aria-label="Navegação principal">
+      <a href="#promocoes">Promoções</a>
+      <a href="#produtos">Produtos</a>
+      <a href="#experiencia">Experiência</a>
+      <a href="#visite">Visite</a>
+    </nav>
+    <button class="menu-toggle od-touch" id="menuToggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span class="hamburger" aria-hidden="true"><i></i><i></i></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <nav aria-label="Menu móvel">
+      <a href="#promocoes">Promoções</a>
+      <a href="#produtos">Produtos</a>
+      <a href="#experiencia">Experiência</a>
+      <a href="#visite">Visite</a>
+    </nav>
+  </div>
+
+  <main id="top">
+    <section class="hero" id="hero" aria-labelledby="hero-title">
+      <div class="hero-text-block" id="heroText">
+        <div class="eyebrow">Rio Sul Signature Market</div>
+        <div class="hero-heading-top">
+          <span class="hero-own-the">Compre em</span>
+          <p class="hero-subtitle-desktop">Um supermercado com presença arquitetônica, curadoria de produtos e atendimento elevado para o cotidiano.</p>
+        </div>
+        <h1 class="hero-extraordinary" id="hero-title">Grande Estilo</h1>
+        <p class="hero-subtitle-mobile">Uma experiência premium para compras, ofertas e produtos selecionados.</p>
+        <div class="hero-cta-row">
+          <a class="button primary" href="#promocoes">Ver ofertas nobres</a>
+          <a class="button secondary" href="#produtos">Explorar produtos</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="floating-logo-card" id="floatingLogo" aria-hidden="true">
+      <img src="assets/rio-sul-logo.webp" width="2172" height="724" alt="">
+    </div>
+
+    <section class="intro-band dark-section" id="historia" aria-labelledby="statement-title">
+      <div class="intro-content reveal">
+        <p class="section-kicker">Identidade de alto padrão</p>
+        <h2 class="statement" id="statement-title">Toda compra pode ser mais que rotina. No <strong>Rio Sul</strong>, arquitetura, frescor e seleção convivem em uma experiência precisa, generosa e memorável.</h2>
+        <div class="stats-row" aria-label="Indicadores do Supermercados Rio Sul">
+          <div class="stat od-stat">
+            <span class="stat-value count" data-end="320" data-suffix="+">0+</span>
+            <span class="stat-label">marcas selecionadas</span>
+          </div>
+          <div class="stat od-stat">
+            <span class="stat-value count" data-end="42" data-suffix="">0</span>
+            <span class="stat-label">categorias premium</span>
+          </div>
+          <div class="stat od-stat">
+            <span class="stat-value count" data-end="7" data-suffix="h">0h</span>
+            <span class="stat-label">abertura diária</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="promos" id="promocoes" aria-labelledby="promos-title">
+      <div class="section-head reveal">
+        <div>
+          <p class="section-kicker">Promoções em destaque</p>
+          <h2 class="section-title" id="promos-title">Encarte Rio Sul em destaque</h2>
+        </div>
+        <p class="section-copy">O encarte correto entra como peça central da campanha, com leitura ampla, presença premium e acesso ao PDF original.</p>
+      </div>
+      <div class="promo-grid">
+        <article class="feature-promo reveal">
+          <img class="promo-img" src="assets/encarte-rio-sul-01.webp" width="1531" height="1701" alt="Capa do encarte correto do Supermercados Rio Sul">
+          <div class="promo-shade"></div>
+          <div class="promo-content">
+            <span class="badge">Encarte correto</span>
+            <h3 class="promo-title">Ofertas oficiais Rio Sul</h3>
+            <p class="promo-text">A peça enviada agora orienta a campanha principal e substitui o encarte genérico usado como referência inicial.</p>
+          </div>
+        </article>
+        <div class="promo-stack">
+          <article class="small-promo reveal">
+            <img class="promo-img" src="assets/artisan-bakery.webp" width="1400" height="931" alt="Pães artesanais em exposição">
+            <div class="promo-shade"></div>
+            <div class="promo-content">
+              <span class="badge">Padaria</span>
+              <h3 class="promo-title">Fornada nobre</h3>
+              <p class="promo-text">Pães especiais, doces e cafés para uma compra com pausa.</p>
+            </div>
+          </article>
+          <article class="small-promo reveal">
+            <img class="promo-img" src="assets/wine-cellar.webp" width="1400" height="933" alt="Garrafa de vinho e taças em ambiente sofisticado">
+            <div class="promo-shade"></div>
+            <div class="promo-content">
+              <span class="badge">Adega</span>
+              <h3 class="promo-title">Rótulos escolhidos</h3>
+              <p class="promo-text">Vinhos e bebidas para receber bem, do cotidiano ao jantar especial.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+      <div class="encarte-showcase reveal" aria-labelledby="encarte-title">
+        <a class="encarte-cover" href="encarte-rio-sul.pdf" aria-label="Abrir PDF completo do encarte Rio Sul">
+          <img src="assets/encarte-rio-sul-01.webp" width="1531" height="1701" alt="Primeira página do encarte correto Rio Sul">
+        </a>
+        <div class="encarte-copy">
+          <span class="badge">PDF completo · 8 páginas</span>
+          <h3 id="encarte-title">O encarte certo, agora integrado</h3>
+          <p>As páginas foram convertidas para WebP local e permanecem ligadas ao PDF original. O visual preserva a proposta premium do site sem perder a força comercial da peça real.</p>
+          <a class="button secondary" href="encarte-rio-sul.pdf">Abrir encarte em PDF</a>
+        </div>
+        <div class="encarte-rail od-rail" aria-label="Páginas do encarte Rio Sul">
+          <figure class="encarte-page">
+            <img src="assets/encarte-rio-sul-01.webp" width="1531" height="1701" alt="Página 1 do encarte Rio Sul">
+          </figure>
+          <figure class="encarte-page">
+            <img src="assets/encarte-rio-sul-02.webp" width="1531" height="1701" alt="Página 2 do encarte Rio Sul">
+          </figure>
+          <figure class="encarte-page">
+            <img src="assets/encarte-rio-sul-03.webp" width="1531" height="1701" alt="Página 3 do encarte Rio Sul">
+          </figure>
+          <figure class="encarte-page">
+            <img src="assets/encarte-rio-sul-04.webp" width="1531" height="1701" alt="Página 4 do encarte Rio Sul">
+          </figure>
+          <figure class="encarte-page">
+            <img src="assets/encarte-rio-sul-05.webp" width="1531" height="1701" alt="Página 5 do encarte Rio Sul">
+          </figure>
+          <figure class="encarte-page">
+            <img src="assets/encarte-rio-sul-06.webp" width="1531" height="1701" alt="Página 6 do encarte Rio Sul">
+          </figure>
+          <figure class="encarte-page">
+            <img src="assets/encarte-rio-sul-07.webp" width="1531" height="1701" alt="Página 7 do encarte Rio Sul">
+          </figure>
+          <figure class="encarte-page">
+            <img src="assets/encarte-rio-sul-08.webp" width="1531" height="1701" alt="Página 8 do encarte Rio Sul">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="products dark-section" id="produtos" aria-labelledby="products-title">
+      <div class="ticker" aria-hidden="true">
+        <span>Rio Sul · Frescor · Adega · Padaria · Açougue · Mercearia · </span>
+        <span>Rio Sul · Frescor · Adega · Padaria · Açougue · Mercearia · </span>
+      </div>
+      <div class="section-head reveal">
+        <div>
+          <p class="section-kicker">Grande gama de produtos</p>
+          <h2 class="section-title" id="products-title">Uma curadoria para a casa inteira</h2>
+        </div>
+        <p class="section-copy">Categorias amplas com fotografia de alta qualidade em WebP, organizadas para valorizar a variedade sem transformar a página em encarte comum.</p>
+      </div>
+      <div class="product-gallery" aria-label="Galeria de categorias Rio Sul">
+        <article class="product-card" tabindex="0">
+          <span class="product-index">01</span>
+          <img src="assets/fresh-greens.webp" width="1400" height="933" alt="Salada fresca com folhas e vegetais coloridos">
+          <div class="product-info">
+            <h3>Orgânicos</h3>
+            <p>Verduras, folhas e legumes para uma rotina leve.</p>
+          </div>
+        </article>
+        <article class="product-card" tabindex="0">
+          <span class="product-index">02</span>
+          <img src="assets/artisan-bakery.webp" width="1400" height="931" alt="Pães artesanais dourados">
+          <div class="product-info">
+            <h3>Padaria</h3>
+            <p>Fornada diária com acabamento artesanal.</p>
+          </div>
+        </article>
+        <article class="product-card" tabindex="0">
+          <span class="product-index">03</span>
+          <img src="assets/wine-cellar.webp" width="1400" height="933" alt="Vinhos selecionados">
+          <div class="product-info">
+            <h3>Adega</h3>
+            <p>Rótulos para harmonizar, presentear e celebrar.</p>
+          </div>
+        </article>
+        <article class="product-card" tabindex="0">
+          <span class="product-index">04</span>
+          <img src="assets/premium-coffee.webp" width="1400" height="933" alt="Café especial sendo preparado">
+          <div class="product-info">
+            <h3>Cafés</h3>
+            <p>Grãos, cápsulas e aromas para todos os momentos.</p>
+          </div>
+        </article>
+        <article class="product-card" tabindex="0">
+          <span class="product-index">05</span>
+          <img src="assets/encarte-rio-sul-01.webp" width="1531" height="1701" alt="Encarte correto do Supermercados Rio Sul">
+          <div class="product-info">
+            <h3>Encarte</h3>
+            <p>Ofertas oficiais do Rio Sul em oito páginas.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="experience" id="experiencia" aria-labelledby="experience-title">
+      <div class="experience-grid">
+        <div class="experience-image reveal">
+          <img src="assets/zap-rio-sul.webp" width="1672" height="941" alt="Banner Zap do Rio Sul com fachada do supermercado e cliente usando celular">
+        </div>
+        <div class="reveal">
+          <p class="section-kicker">Experiência integrada</p>
+          <h2 class="section-title" id="experience-title">Do salão de compras ao contato digital</h2>
+          <div class="service-list">
+            <article class="service-item">
+              <span class="service-number">01</span>
+              <div>
+                <h3>Arquitetura que orienta</h3>
+                <p>Setores claros, áreas amplas e visuais editoriais ajudam o cliente a encontrar qualidade sem esforço.</p>
+              </div>
+            </article>
+            <article class="service-item">
+              <span class="service-number">02</span>
+              <div>
+                <h3>Promoções com prestígio</h3>
+                <p>Ofertas aparecem como curadoria, com hierarquia forte para produtos âncora, validade e categoria.</p>
+              </div>
+            </article>
+            <article class="service-item">
+              <span class="service-number">03</span>
+              <div>
+                <h3>Atendimento próximo</h3>
+                <p>Chamadas para WhatsApp, visitas e campanhas locais aproximam a marca do bairro sem perder sofisticação.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="final-cta" id="visite" aria-labelledby="visit-title">
+      <div class="cta-inner">
+        <div>
+          <p class="section-kicker">Supermercados Rio Sul</p>
+          <h2 id="visit-title">Um mercado com presença de marca</h2>
+          <p>Uma base extraordinária para evoluir para encartes dinâmicos, WhatsApp, clube de ofertas, rotas de loja e experiência de compra online.</p>
+        </div>
+        <a class="button primary" href="#top">Voltar ao topo</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>© Supermercados Rio Sul — protótipo premium</span>
+    <span>Arquitetura · Promoções · Produtos · Atendimento</span>
+  </footer>
+
+  <script>
+    (() => {
+      const FULL_TEXT = "Rio Sul.";
+      const CHAR_INTERVAL = 140;
+      const TYPE_START = 600;
+      const LIFT_AT = TYPE_START + FULL_TEXT.length * CHAR_INTERVAL + 700;
+
+      const preloader = document.getElementById("preloader");
+      const typed = document.getElementById("typed");
+      const cursor = document.getElementById("cursor");
+      const heroText = document.getElementById("heroText");
+      const floatingLogo = document.getElementById("floatingLogo");
+      const nav = document.getElementById("siteNav");
+      const menuToggle = document.getElementById("menuToggle");
+      const mobileMenu = document.getElementById("mobileMenu");
+
+      let liftDone = false;
+
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        preloader.classList.add("done");
+        heroText.classList.add("show");
+        liftDone = true;
+      } else {
+        FULL_TEXT.split("").forEach((char, index) => {
+          window.setTimeout(() => {
+            const span = document.createElement("span");
+            span.textContent = char;
+            typed.appendChild(span);
+          }, TYPE_START + index * CHAR_INTERVAL);
+        });
+
+        window.setTimeout(() => cursor.classList.add("hide"), LIFT_AT - 150);
+        window.setTimeout(() => {
+          preloader.classList.add("lift");
+          floatingLogo.classList.add("lifting");
+        }, LIFT_AT);
+        window.setTimeout(() => heroText.classList.add("show"), LIFT_AT + 1300);
+        window.setTimeout(() => {
+          preloader.classList.add("done");
+          floatingLogo.classList.add("scroll-control");
+          liftDone = true;
+          updateFloatingLogo();
+        }, LIFT_AT + 2100);
+      }
+
+      const setMenu = (open) => {
+        mobileMenu.classList.toggle("open", open);
+        document.body.classList.toggle("menu-open", open);
+        menuToggle.setAttribute("aria-expanded", String(open));
+        menuToggle.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
+      };
+      menuToggle.addEventListener("click", () => setMenu(menuToggle.getAttribute("aria-expanded") !== "true"));
+      mobileMenu.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => setMenu(false)));
+
+      const smoothstep = (x) => x * x * (3 - 2 * x);
+      const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+
+      function updateFloatingLogo() {
+        if (!liftDone || !floatingLogo) return;
+        const hero = document.getElementById("hero");
+        const intro = document.getElementById("historia");
+        const heroRect = hero.getBoundingClientRect();
+        const introRect = intro.getBoundingClientRect();
+        const vh = window.innerHeight;
+        const vw = window.innerWidth;
+        const heroH = hero.offsetHeight;
+        const baseW = Math.min(Math.max(vw * 0.72, 360), 760);
+        const imgH = baseW * (724 / 2172);
+        const triggerPoint = -(heroH * 0.30);
+        const endPoint = heroRect.top - (introRect.bottom - vh);
+        const progress = clamp((heroRect.top - triggerPoint) / (endPoint - triggerPoint || 1), 0, 1);
+        const t = smoothstep(smoothstep(progress));
+        const startX = (vw - baseW) / 2;
+        const startY = vh - imgH - vh * 0.05;
+        const finalScale = vw < 768 ? 0.72 : 1.05;
+        const finalX = vw < 768 ? (vw - baseW * finalScale) / 2 : vw - baseW * finalScale - vw * 0.05;
+        const finalY = introRect.bottom - imgH * finalScale - vh * 0.52;
+        const currentX = startX + (finalX - startX) * t;
+        const currentY = startY + (finalY - startY) * t;
+        const currentScale = 1 + (finalScale - 1) * t;
+
+        if (progress <= 0) {
+          floatingLogo.style.width = `${baseW}px`;
+          floatingLogo.style.left = "0";
+          floatingLogo.style.bottom = "auto";
+          floatingLogo.style.transform = `translate3d(${startX}px, ${startY}px, 0) scale(1)`;
+        } else {
+          floatingLogo.style.width = `${baseW}px`;
+          floatingLogo.style.left = "0";
+          floatingLogo.style.bottom = "auto";
+          floatingLogo.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) scale(${currentScale})`;
+          floatingLogo.style.transformOrigin = "top left";
+        }
+      }
+
+      function updateNavColor() {
+        const onDark = Array.from(document.querySelectorAll(".dark-section")).some((section) => {
+          const rect = section.getBoundingClientRect();
+          return rect.top <= 4 && rect.bottom > 4;
+        });
+        nav.style.color = onDark ? "#fffaf0" : "#142f24";
+      }
+
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in");
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.18 });
+      document.querySelectorAll(".reveal").forEach((node) => revealObserver.observe(node));
+
+      const countObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          const end = Number(el.dataset.end || "0");
+          const suffix = el.dataset.suffix || "";
+          const duration = 2000;
+          const start = performance.now();
+          const tick = (now) => {
+            const t = clamp((now - start) / duration, 0, 1);
+            const eased = 1 - Math.pow(1 - t, 3);
+            el.textContent = `${Math.round(eased * end)}${suffix}`;
+            if (t < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+          countObserver.unobserve(el);
+        });
+      }, { threshold: 0.3 });
+      document.querySelectorAll(".count").forEach((node) => countObserver.observe(node));
+
+      let ticking = false;
+      const onScroll = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          updateNavColor();
+          updateFloatingLogo();
+          ticking = false;
+        });
+      };
+
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onScroll);
+      updateNavColor();
+    })();
+  </script>
+</body>
+</html>

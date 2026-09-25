@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Supermercados Rio Sul — Experiência Premium</title>
   <meta name="description" content="Supermercados Rio Sul em uma experiência digital premium, com arquitetura imersiva, promoções editoriais e seleção ampla de produtos.">
-  <link rel="preload" as="image" href="assets/rio-sul-logo.webp">
+  <link rel="preload" as="image" href="assets/rio-sul-logo-header.png">
   <link rel="preload" as="image" href="assets/hero-rio-sul-fachada.webp">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syne:wght@400;700;800;900&display=swap');
@@ -134,15 +134,9 @@
       color: inherit;
     }
     .brand-emblem {
-      width: clamp(112px, 14vw, 190px);
+      width: clamp(150px, 17vw, 230px);
       height: auto;
       filter: drop-shadow(0 10px 22px rgba(0,0,0,0.20));
-    }
-    .brand-word {
-      font-family: Syne, sans-serif;
-      font-size: clamp(16px, 1.4vw, 20px);
-      font-weight: 800;
-      letter-spacing: -0.03em;
     }
     .nav-links {
       display: flex;
@@ -855,8 +849,7 @@
 
     @media (max-width: 767px) {
       :root { --side: 20px; }
-      .brand-emblem { width: 118px; }
-      .brand-word { display: none; }
+      .brand-emblem { width: 150px; }
       .hero { background-position: 61% center; }
       .hero-text-block { padding-top: 96px; }
       .hero-own-the { font-size: 8.2vw; }
@@ -902,8 +895,7 @@
 
   <header class="site-nav" id="siteNav">
     <a class="brand-mark" href="#top" aria-label="Supermercados Rio Sul — início">
-      <img class="brand-emblem" src="assets/rio-sul-logo.webp" width="2172" height="724" alt="Logotipo Supermercados Rio Sul">
-      <span class="brand-word">Supermercados</span>
+      <img class="brand-emblem" src="assets/rio-sul-logo-header.png" width="2172" height="724" alt="Logotipo Supermercados Rio Sul">
     </a>
     <nav class="nav-links" aria-label="Navegação principal">
       <a href="#promocoes">Promoções</a>

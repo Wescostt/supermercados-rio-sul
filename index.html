@@ -228,7 +228,7 @@
       align-items: end;
       overflow: visible;
       background:
-        linear-gradient(90deg, rgba(247,241,223,0.86) 0%, rgba(247,241,223,0.50) 38%, rgba(247,241,223,0.10) 70%),
+        linear-gradient(90deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.30) 38%, rgba(0,0,0,0.08) 70%),
         url("assets/hero-rio-sul-fachada.webp") center / cover no-repeat;
     }
     .hero::before {
@@ -236,7 +236,7 @@
       position: absolute;
       inset: 0;
       z-index: -1;
-      background: radial-gradient(circle at 72% 48%, rgba(246,214,0,0.26), transparent 33%), linear-gradient(180deg, transparent 55%, var(--paper) 100%);
+      background: linear-gradient(180deg, transparent 55%, rgba(0,0,0,0.35) 100%);
       pointer-events: none;
     }
     .hero-text-block {
@@ -247,6 +247,10 @@
       transition: opacity 0.7s var(--ease) 0.1s, transform 0.7s var(--ease) 0.1s;
     }
     .hero-text-block.show { opacity: 1; transform: translateY(0); }
+    .hero .eyebrow { color: var(--sun); }
+    .hero-heading-top,
+    .hero-extraordinary,
+    .hero-subtitle-mobile { text-shadow: 0 2px 12px rgba(0,0,0,0.45); }
     .eyebrow {
       display: inline-flex;
       align-items: center;
@@ -276,7 +280,7 @@
     .hero-extraordinary {
       font-family: Syne, sans-serif;
       font-weight: 800;
-      color: var(--ink);
+      color: var(--white);
       text-transform: uppercase;
       letter-spacing: -0.055em;
       line-height: 0.9;
@@ -291,7 +295,7 @@
     .hero-subtitle-desktop {
       max-width: 330px;
       margin: 0 0 0.5em;
-      color: rgba(7, 17, 30, 0.72);
+      color: rgba(255,255,255,0.90);
       font-family: Syne, sans-serif;
       font-size: clamp(11px, 0.95vw, 15px);
       font-weight: 700;
@@ -303,7 +307,7 @@
       display: none;
       max-width: 340px;
       margin: 18px 0 0;
-      color: rgba(7, 17, 30, 0.72);
+      color: rgba(255,255,255,0.90);
       font-family: Syne, sans-serif;
       font-size: clamp(13px, 3vw, 16px);
       font-weight: 700;

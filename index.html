@@ -86,18 +86,48 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--green);
+      background: radial-gradient(circle at 50% 40%, #17374a 0%, #0b2535 45%, #071824 100%);
       color: var(--white);
       transform: translateY(0);
       transition: transform 1.5s cubic-bezier(0.45, 0, 0.15, 1);
     }
     .preloader.lift { transform: translateY(-100%); }
     .preloader.done { transition: none; transform: translateY(-100%); pointer-events: none; }
+    .preloader-symbol {
+      position: absolute;
+      left: 50%;
+      top: 47%;
+      width: clamp(230px, 28vw, 340px);
+      height: clamp(180px, 22vw, 260px);
+      background: url("assets/rio-sul-logo-header.png") left top / 350% auto no-repeat;
+      filter: grayscale(1) brightness(0) invert(1);
+      opacity: 0.10;
+      transform: translate(-50%, -65%);
+      pointer-events: none;
+    }
+    .preloader-waves {
+      position: absolute;
+      inset: auto 0 0;
+      height: 80px;
+      background: url("assets/copacabana-wave.svg") 0 0 / 240px 80px repeat-x;
+      opacity: 0.52;
+      animation: promenade-drift 14s linear infinite;
+      pointer-events: none;
+    }
+    .preloader-waves::before {
+      content: "";
+      position: absolute;
+      inset: -34px 0 0;
+      background: linear-gradient(180deg, #071824 0, transparent 42%);
+    }
+    @keyframes promenade-drift { to { background-position-x: 240px; } }
     .typewriter {
+      position: relative;
+      z-index: 1;
       display: inline-flex;
       align-items: center;
       font-family: Syne, sans-serif;
-      font-size: 2.6rem;
+      font-size: 2.9rem;
       letter-spacing: -0.02em;
       min-height: 1.2em;
     }
@@ -125,9 +155,10 @@
       justify-content: space-between;
       padding: clamp(18px, 2.4vw, 28px) var(--side);
       color: var(--green);
-      transition: color 0.35s ease;
+      transition: color 0.35s ease, padding 0.35s ease;
       mix-blend-mode: normal;
     }
+    .site-nav.is-scrolled { padding-block: 14px; }
     .brand-mark {
       display: flex;
       align-items: center;
@@ -139,7 +170,15 @@
       width: clamp(150px, 17vw, 230px);
       height: auto;
       filter: drop-shadow(0 10px 22px rgba(0,0,0,0.20));
+      transition: width 0.35s ease, opacity 0.35s ease, filter 0.35s ease;
     }
+    .site-nav.is-scrolled .brand-emblem {
+      width: clamp(96px, 10vw, 140px);
+      opacity: 0.28;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.14));
+    }
+    body.menu-open .site-nav .brand-emblem { opacity: 1; }
+    body.menu-open .site-nav { color: var(--green) !important; }
     .nav-links {
       display: flex;
       align-items: center;
@@ -285,7 +324,7 @@
     .hero-extraordinary {
       display: block;
       margin: 0;
-      font-size: clamp(54px, 9.4vw, 164px);
+      font-size: clamp(54px, 6.8vw, 120px);
       white-space: nowrap;
     }
     .hero-subtitle-desktop {
@@ -356,7 +395,7 @@
       transform: translate3d(-50%, 0, 0);
       opacity: 0.92;
     }
-    .floating-logo-card.scroll-control { transition: none; }
+    .floating-logo-card.scroll-control { transition: opacity 0.35s ease; }
     .floating-logo-card img {
       width: 100%;
       height: auto;
@@ -383,6 +422,7 @@
       opacity: 0.42;
       transform: scale(1.05);
     }
+    .intro-band .section-kicker { color: var(--sun); }
     .intro-content {
       position: relative;
       max-width: 1220px;
@@ -428,6 +468,12 @@
       font-size: clamp(12px, 1.1vw, 15px);
       letter-spacing: 0.08em;
       text-transform: uppercase;
+    }
+    .stat-note {
+      margin: 14px 0 0;
+      color: rgba(255,250,240,0.62);
+      font-size: 12px;
+      line-height: 1.5;
     }
 
     .promos {
@@ -490,6 +536,25 @@
     }
     .small-promo { min-height: 250px; }
     .promo-stack { display: grid; gap: clamp(16px, 2vw, 28px); }
+    .butcher-feature {
+      max-width: 1280px;
+      min-height: clamp(430px, 42vw, 540px);
+      margin: clamp(16px, 2vw, 28px) auto 0;
+    }
+    .butcher-feature .promo-img { opacity: 0.82; }
+    .butcher-feature .promo-shade {
+      background: linear-gradient(90deg, rgba(5,11,16,0.88), rgba(5,11,16,0.48) 52%, rgba(5,11,16,0.10)),
+                  linear-gradient(0deg, rgba(5,11,16,0.62), transparent 55%);
+    }
+    .butcher-feature .promo-content { max-width: 700px; }
+    .butcher-feature .promo-title { font-size: clamp(42px, 6.4vw, 92px); }
+    .butcher-link {
+      width: max-content;
+      margin-top: 4px;
+      color: var(--white);
+      background: rgba(255,250,240,0.12);
+      border-color: rgba(255,250,240,0.68);
+    }
     .promo-img {
       position: absolute;
       inset: 0;
@@ -649,6 +714,19 @@
     }
     .product-card:hover,
     .product-card:focus-within { flex: 3.8; }
+    .product-card.butcher-card { flex-grow: 1.55; }
+    .product-card.butcher-card:hover,
+    .product-card.butcher-card:focus-within { flex-grow: 4.2; }
+    .product-card.butcher-card::after {
+      content: "";
+      position: absolute;
+      inset: 45% 0 0;
+      background: linear-gradient(0deg, rgba(4,9,12,0.82), transparent);
+      pointer-events: none;
+    }
+    .product-card.butcher-card .product-info,
+    .product-card.butcher-card .product-index { z-index: 1; }
+    .product-card.butcher-card .product-info { opacity: 1; transform: none; }
     .product-card img {
       width: 100%;
       height: 100%;
@@ -837,7 +915,7 @@
       .promo-grid,
       .encarte-showcase,
       .experience-grid,
-      .cta-inner { grid-template-columns: 1fr; }
+      .cta-inner { grid-template-columns: minmax(0, 1fr); }
       .product-gallery {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -857,20 +935,27 @@
       .hero-own-the { font-size: 8.2vw; }
       .hero-extraordinary { font-size: 15vw; }
       .hero-cta-row { align-items: stretch; flex-direction: column; max-width: 320px; }
-      .intro-band { min-height: auto; }
+      .intro-band { min-height: auto; padding-top: 118px; }
+      .intro-band::before { opacity: 0.28; }
       .intro-content { padding-left: 0; }
       .statement { font-size: clamp(29px, 8.6vw, 48px); }
       .stats-row { grid-template-columns: 1fr; }
       .stat,
       .stat:first-child { border-left: 0; border-top: 1px solid rgba(255,255,255,0.18); }
       .stat:first-child { border-top: 0; }
+      .promos { margin-top: 0; }
       .section-head { display: grid; }
       .feature-promo,
       .small-promo { min-height: 380px; border-radius: 22px; }
+      .butcher-feature { min-height: 500px; }
+      .butcher-feature .promo-content { left: 18px; right: 18px; }
+      .butcher-feature .promo-title { font-size: clamp(31px, 8vw, 44px); letter-spacing: -0.07em; }
+      .butcher-link { max-width: 100%; padding-inline: 14px; font-size: 0.68rem; }
       .encarte-copy { padding: 24px; }
       .encarte-page { width: min(72vw, 260px); }
       .product-gallery { grid-template-columns: 1fr; }
       .product-card { min-height: 420px; }
+      .product-card.butcher-card { min-height: 500px; }
       .footer { flex-direction: column; }
     }
 
@@ -892,7 +977,9 @@
 </head>
 <body>
   <div class="preloader" id="preloader" aria-hidden="true">
+    <div class="preloader-symbol"></div>
     <div class="typewriter" aria-label="Rio Sul"><span id="typed"></span><i class="cursor" id="cursor"></i></div>
+    <div class="preloader-waves"></div>
   </div>
 
   <header class="site-nav" id="siteNav">
@@ -956,10 +1043,11 @@
             <span class="stat-label">categorias premium</span>
           </div>
           <div class="stat od-stat">
-            <span class="stat-value count" data-end="7" data-suffix="h">0h</span>
-            <span class="stat-label">abertura diária</span>
+            <span class="stat-value count" data-end="15" data-suffix="h">0h</span>
+            <span class="stat-label">janela de referência · 7h às 22h</span>
           </div>
         </div>
+        <p class="stat-note">Horário aproximado de referência. Consulte a unidade antes de sair; dias e feriados podem variar.</p>
       </div>
     </section>
 
@@ -969,16 +1057,16 @@
           <p class="section-kicker">Promoções em destaque</p>
           <h2 class="section-title" id="promos-title">Encarte Rio Sul em destaque</h2>
         </div>
-        <p class="section-copy">O encarte correto entra como peça central da campanha, com leitura ampla, presença premium e acesso ao PDF original.</p>
+        <p class="section-copy">Ofertas, sabores e descobertas para planejar a próxima visita com mais prazer.</p>
       </div>
       <div class="promo-grid">
         <article class="feature-promo reveal">
           <img class="promo-img" src="assets/encarte-rio-sul-01.webp" width="1531" height="1701" alt="Capa do encarte correto do Supermercados Rio Sul">
           <div class="promo-shade"></div>
           <div class="promo-content">
-            <span class="badge">Encarte correto</span>
+            <span class="badge">Encarte Rio Sul</span>
             <h3 class="promo-title">Ofertas oficiais Rio Sul</h3>
-            <p class="promo-text">A peça enviada agora orienta a campanha principal e substitui o encarte genérico usado como referência inicial.</p>
+            <p class="promo-text">Escolha suas ofertas favoritas e prepare sua lista antes de visitar a loja.</p>
           </div>
         </article>
         <div class="promo-stack">
@@ -1002,6 +1090,16 @@
           </article>
         </div>
       </div>
+      <article class="feature-promo butcher-feature reveal" aria-labelledby="butcher-title">
+        <img class="promo-img" src="assets/butcher-counter.webp" width="1536" height="1024" loading="lazy" alt="Cortes de carne apresentados em um balcão de açougue">
+        <div class="promo-shade"></div>
+        <div class="promo-content">
+          <span class="badge">Açougue Rio Sul</span>
+          <h3 class="promo-title" id="butcher-title">Cortes em destaque</h3>
+          <p class="promo-text">Do preparo de todos os dias ao churrasco especial, o corte certo faz a ocasião.</p>
+          <a class="button butcher-link" href="#produtos">Explorar açougue ↗</a>
+        </div>
+      </article>
       <div class="encarte-showcase reveal" aria-labelledby="encarte-title">
         <a class="encarte-cover" href="encarte-rio-sul.pdf" aria-label="Abrir PDF completo do encarte Rio Sul">
           <img src="assets/encarte-rio-sul-01.webp" width="1531" height="1701" alt="Primeira página do encarte correto Rio Sul">
@@ -1051,11 +1149,19 @@
           <p class="section-kicker">Grande gama de produtos</p>
           <h2 class="section-title" id="products-title">Uma curadoria para a casa inteira</h2>
         </div>
-        <p class="section-copy">Categorias amplas com fotografia de alta qualidade em WebP, organizadas para valorizar a variedade sem transformar a página em encarte comum.</p>
+        <p class="section-copy">Do açougue aos orgânicos, da padaria à adega: escolhas para abastecer a casa e transformar o cotidiano.</p>
       </div>
       <div class="product-gallery" aria-label="Galeria de categorias Rio Sul">
-        <article class="product-card" tabindex="0">
+        <article class="product-card butcher-card" tabindex="0">
           <span class="product-index">01</span>
+          <img src="assets/butcher-counter.webp" width="1536" height="1024" loading="lazy" alt="Seleção de cortes de carne em balcão de açougue">
+          <div class="product-info">
+            <h3>Açougue</h3>
+            <p>Cortes para a rotina, o churrasco e a mesa de domingo.</p>
+          </div>
+        </article>
+        <article class="product-card" tabindex="0">
+          <span class="product-index">02</span>
           <img src="assets/fresh-greens.webp" width="1400" height="933" alt="Salada fresca com folhas e vegetais coloridos">
           <div class="product-info">
             <h3>Orgânicos</h3>
@@ -1063,7 +1169,7 @@
           </div>
         </article>
         <article class="product-card" tabindex="0">
-          <span class="product-index">02</span>
+          <span class="product-index">03</span>
           <img src="assets/artisan-bakery.webp" width="1400" height="931" alt="Pães artesanais dourados">
           <div class="product-info">
             <h3>Padaria</h3>
@@ -1071,7 +1177,7 @@
           </div>
         </article>
         <article class="product-card" tabindex="0">
-          <span class="product-index">03</span>
+          <span class="product-index">04</span>
           <img src="assets/wine-cellar.webp" width="1400" height="933" alt="Vinhos selecionados">
           <div class="product-info">
             <h3>Adega</h3>
@@ -1079,7 +1185,7 @@
           </div>
         </article>
         <article class="product-card" tabindex="0">
-          <span class="product-index">04</span>
+          <span class="product-index">05</span>
           <img src="assets/premium-coffee.webp" width="1400" height="933" alt="Café especial sendo preparado">
           <div class="product-info">
             <h3>Cafés</h3>
@@ -1087,7 +1193,7 @@
           </div>
         </article>
         <article class="product-card" tabindex="0">
-          <span class="product-index">05</span>
+          <span class="product-index">06</span>
           <img src="assets/encarte-rio-sul-01.webp" width="1531" height="1701" alt="Encarte correto do Supermercados Rio Sul">
           <div class="product-info">
             <h3>Encarte</h3>
@@ -1215,6 +1321,8 @@
         const vh = window.innerHeight;
         const vw = window.innerWidth;
         const heroH = hero.offsetHeight;
+        const fade = clamp((heroRect.bottom - vh * 0.25) / (vh * 0.45), 0, 1);
+        floatingLogo.style.opacity = String(fade * 0.76);
         const baseW = Math.min(Math.max(vw * 0.72, 360), 760);
         const imgH = baseW * (724 / 2172);
         const triggerPoint = -(heroH * 0.30);
@@ -1245,6 +1353,7 @@
       }
 
       function updateNavColor() {
+        nav.classList.toggle("is-scrolled", window.scrollY > 80);
         const onDark = Array.from(document.querySelectorAll(".dark-section")).some((section) => {
           const rect = section.getBoundingClientRect();
           return rect.top <= 4 && rect.bottom > 4;

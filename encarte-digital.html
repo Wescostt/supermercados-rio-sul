@@ -9,6 +9,7 @@
   <link rel="icon" type="image/png" href="assets/rio-sul-favicon.png">
   <link rel="apple-touch-icon" href="assets/rio-sul-favicon.png">
   <link rel="stylesheet" href="pages.css">
+  <link rel="stylesheet" href="refinement.css">
   <script defer src="assets/pdf-lib.min.js"></script>
   <script defer src="encarte-digital.js"></script>
 </head>
@@ -23,8 +24,8 @@
     <section class="catalog-hero">
       <div class="hero-glow"></div>
       <div class="catalog-hero-inner">
-        <div><p class="eyebrow-light">Encarte digital · Setembro 2026</p><h1>Seu roteiro de compras começa <em>aqui.</em></h1><p>Explore ofertas reais, escolha os favoritos e leve uma lista pronta para a loja. Sem carrinho, sem cadastro.</p><div class="hero-actions"><a class="solid-link" href="#ofertas">Explorar ofertas <span aria-hidden="true">↗</span></a><a class="ghost-link" href="encarte-rio-sul.pdf" target="_blank" rel="noopener">Ver encarte original</a></div></div>
-        <div class="hero-flyer" aria-hidden="true"><img src="assets/encarte-rio-sul-01.webp" alt="" width="1531" height="1701"><span>01 — 30 SET</span></div>
+        <div class="hero-copy"><p class="eyebrow-light">Encarte digital · Setembro 2026</p><h1>Seu roteiro de compras começa <em>aqui.</em></h1><p>Ofertas para explorar com calma, salvar e levar para a loja. Escolha os produtos, ajuste a lista e siga para a unidade mais próxima.</p><div class="hero-actions"><a class="solid-link" href="#ofertas">Explorar ofertas <span aria-hidden="true">↗</span></a><a class="ghost-link" href="encarte-rio-sul.pdf" target="_blank" rel="noopener">Ver encarte original</a></div></div>
+        <div class="hero-products" aria-label="Produtos em destaque no encarte"><span class="hero-products-caption">ESCOLHAS DO MÊS / RIO SUL</span><div class="hero-product hero-product-main"><img src="assets/products/flyer-02-04.webp" alt="Café Pimpinela 500 g" width="500" height="500"><span>O melhor da sua lista.</span></div><div class="hero-product hero-product-side"><img src="assets/products/flyer-02-08.webp" alt="Azeite Gallo 500 ml" width="500" height="500"></div><div class="hero-product hero-product-small"><img src="assets/products/flyer-02-12.webp" alt="Leite condensado Italac 395 g" width="500" height="500"></div><span class="hero-products-stamp">01—30<br>SET</span></div>
       </div>
       <div class="catalog-facts"><span><strong>01 a 30/09</strong> validade do encarte</span><span><strong>PDF + notas</strong> sua lista, do seu jeito</span><span><strong>64 lojas</strong> para visitar</span></div>
     </section>
@@ -33,7 +34,7 @@
 
     <section class="offer-zone" aria-label="Ofertas do encarte"><div class="offer-toolbar"><label class="search-field"><span aria-hidden="true">⌕</span><input id="offerSearch" type="search" placeholder="Buscar produto ou marca" aria-label="Buscar ofertas"></label><label class="sort-field">Ordenar <select id="offerSort" aria-label="Ordenar ofertas"><option value="featured">Destaques</option><option value="price-asc">Menor preço</option><option value="price-desc">Maior preço</option><option value="name">Nome</option></select></label></div><div class="category-pills" id="categories" aria-label="Categorias"></div><div class="section-line"><div><h2 id="resultTitle">Encarte de setembro</h2><p id="resultSubtitle">Ofertas selecionadas do PDF original.</p></div><span id="resultCount" class="result-count"></span></div><div class="offers-grid" id="offersGrid"></div><p class="empty-message" id="emptyOffers" hidden>Nenhuma oferta encontrada. Tente outra busca ou categoria.</p></section>
 
-    <section class="catalog-note"><div><span class="note-ornament">✳</span><p class="eyebrow-dark">Do encarte à sua rotina</p><h2>Uma lista feita para a visita.</h2><p>Marque os produtos, ajuste quantidades e salve em PDF ou texto. No celular, você também pode abrir o menu de compartilhamento para guardar nas Notas ou mandar a lista para sua conversa no WhatsApp.</p><button class="dark-button" id="openListBottom" type="button">Abrir minha lista ↗</button></div><img src="assets/encarte-rio-sul-08.webp" alt="Última página do encarte Rio Sul de setembro" width="1531" height="1701" loading="lazy"></section>
+    <section class="catalog-note"><div><span class="note-ornament">✳</span><p class="eyebrow-dark">Do encarte à sua rotina</p><h2>Uma lista feita para a visita.</h2><p>Marque os produtos, ajuste quantidades e salve em PDF ou texto. No celular, você também pode abrir o menu de compartilhamento para guardar nas Notas ou mandar a lista para sua conversa no WhatsApp.</p><button class="dark-button" id="openListBottom" type="button">Abrir minha lista ↗</button></div><div class="note-preview" aria-hidden="true"><span>RIO SUL / MINHA LISTA</span><strong>Escolha.<br>Salve.<br>Leve.</strong><div><span>01</span><span>PDF</span></div><div><span>02</span><span>NOTAS</span></div><div><span>03</span><span>WHATSAPP</span></div></div></section>
   </main>
 
   <div class="drawer-scrim" id="drawerScrim" hidden></div>

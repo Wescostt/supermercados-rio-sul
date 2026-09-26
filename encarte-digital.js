@@ -1,5 +1,6 @@
 (() => {
   const API = 'https://www.supermercadosriosul.com.br/api/promotions.php?orderr=id%20DESC&limit=500';
+  const SITE_PHOTO_IDS = new Set([7,11,13,16,27,30,31,80,97,100,107,118,142,148]);
   const STORAGE_KEY = 'rio-sul-lista-v1';
   const money = value => new Intl.NumberFormat('pt-BR', {style:'currency', currency:'BRL'}).format(value);
   const dateText = value => value.split('-').reverse().join('/');
@@ -21,9 +22,10 @@
   const availability = offer => isExpired(offer) ? 'Encerrada' : isFuture(offer) ? 'Em breve' : 'Válida agora';
 
   function offerImage(offer) {
-    if (!offer.crop) return `<div class="offer-visual no-photo"><strong>${escapeHtml(offer.name.split(' ').slice(0,3).join(' '))}</strong><span class="source-chip">Oferta do site oficial</span></div>`;
-    const [x,y,w,h] = offer.crop;
-    return `<div class="offer-visual"><svg viewBox="${x} ${y} ${w} ${h}" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Produto no encarte, página ${offer.page}"><image href="assets/encarte-rio-sul-${String(offer.page).padStart(2,'0')}.webp" x="0" y="0" width="1531" height="1701"/></svg><span class="source-chip">Encarte · pág. ${offer.page}</span></div>`;
+    const siteId=offer.source==='site'?Number(offer.id.slice(5)):null;
+    const image=offer.source==='site' ? (SITE_PHOTO_IDS.has(siteId)?`assets/site-promotions/${siteId}.webp`:null) : offer.image;
+    const label=offer.source==='site'?'Oferta do site oficial':`Encarte · pág. ${offer.page}`;
+    return `<div class="offer-visual ${image?'has-photo':'no-photo'}"><strong class="visual-fallback">${escapeHtml(offer.name.split(' ').slice(0,4).join(' '))}</strong>${image?`<img src="${escapeHtml(image)}" alt="Imagem ilustrativa de ${escapeHtml(offer.name)}" loading="lazy" decoding="async" onerror="this.parentElement.classList.add('no-photo');this.remove()">`:''}<span class="source-chip">${label}</span></div>`;
   }
   function renderCategories() {
     const categories = ['Todas','Ofertas do site','Mercearia','Laticínios','Padaria','Frios e congelados','Cuidados pessoais','Limpeza e casa','Açougue e congelados'];
@@ -34,9 +36,11 @@
     const matches = offers.filter(offer => (category === 'Todas' || (category === 'Ofertas do site' ? offer.source === 'site' : offer.category === category)) && (!query || normalize(offer.name).includes(query)));
     const sort = $('offerSort').value;
     matches.sort((a,b) => sort === 'price-asc' ? a.price-b.price : sort === 'price-desc' ? b.price-a.price : sort === 'name' ? a.name.localeCompare(b.name,'pt-BR') : (a.source === b.source ? a.name.localeCompare(b.name,'pt-BR') : a.source === 'site' ? -1 : 1));
-    $('resultCount').textContent = `${matches.length} ofertas`;
+    $('resultCount').textContent = `${matches.length} ${matches.length===1?'oferta':'ofertas'}`;
+    $('resultTitle').textContent=category==='Todas'?'Descubra as ofertas':category==='Ofertas do site'?'Ofertas do site oficial':category;
+    $('resultSubtitle').textContent=query?'Resultados da sua busca.':'Selecione, compare e monte sua lista para a loja.';
     $('emptyOffers').hidden = matches.length > 0;
-    $('offersGrid').innerHTML = matches.map(offer => `<article class="offer-card ${isExpired(offer)?'expired':''}">${offerImage(offer)}<div class="offer-card-body"><div class="offer-meta"><span>${escapeHtml(offer.category)}</span><span>${availability(offer)}</span></div><h3>${escapeHtml(offer.name)}</h3><div class="price-line"><strong>${money(offer.price)}</strong><span>por unidade anunciada</span></div><p class="validity">Válida de ${dateText(offer.from)} a ${dateText(offer.to)}${offer.source==='flyer'?' · Encarte':' · Site oficial'}</p><div class="card-actions"><button type="button" data-add="${offer.id}" class="${list[offer.id]?'selected':''}" ${isExpired(offer)||isFuture(offer)?'disabled':''} aria-label="${list[offer.id]?'Remover':'Adicionar'} ${escapeHtml(offer.name)} ${list[offer.id]?'da':'à'} lista">${list[offer.id]?'♥ Na lista':'♡ Adicionar'}</button>${offer.page?`<a href="encarte-rio-sul.pdf#page=${offer.page}" target="_blank" rel="noopener" aria-label="Ver página ${offer.page} do encarte">↗</a>`:''}</div></div></article>`).join('');
+    $('offersGrid').innerHTML = matches.map((offer,index) => `<article class="offer-card ${isExpired(offer)?'expired':''} ${index===0&&matches.length>3&&!query&&category==='Todas'&&sort==='featured'?'offer-card-feature':''}">${offerImage(offer)}<div class="offer-card-body"><div class="offer-meta"><span>${escapeHtml(offer.category)}</span><span>${availability(offer)}</span></div><h3>${escapeHtml(offer.name)}</h3><div class="price-line"><strong>${money(offer.price)}</strong><span>por unidade anunciada</span></div><p class="validity">Válida de ${dateText(offer.from)} a ${dateText(offer.to)}${offer.source==='flyer'?' · Encarte':' · Site oficial'}</p><div class="card-actions"><button type="button" data-add="${offer.id}" class="${list[offer.id]?'selected':''}" ${isExpired(offer)||isFuture(offer)?'disabled':''} aria-label="${list[offer.id]?'Remover':'Adicionar'} ${escapeHtml(offer.name)} ${list[offer.id]?'da':'à'} lista">${list[offer.id]?'♥ Na lista':'♡ Adicionar'}</button>${offer.page?`<a href="encarte-rio-sul.pdf#page=${offer.page}" target="_blank" rel="noopener" aria-label="Ver página ${offer.page} do encarte">↗</a>`:''}</div></div></article>`).join('');
   }
   function quantityOf(id) { const entry=list[id]; return Number(entry && typeof entry==='object' ? entry.quantity : entry)||0; }
   function selected() { return Object.entries(list).map(([id,entry]) => ({offer:offers.find(item=>item.id===id)||(entry&&typeof entry==='object'?entry.offer:null), quantity:quantityOf(id)})).filter(item=>item.offer&&item.quantity>0); }

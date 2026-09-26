@@ -9,11 +9,24 @@
   function showOnMap(store){
     if(!store)return;
     const key=keyOf(store);
-    if(selectedKey!==key)$('storeMap').src=`https://maps.google.com/maps?q=${encodeURIComponent(key)}&z=15&output=embed`;
+    const changed=selectedKey!==key;
+    if(changed)$('storeMap').src=`https://maps.google.com/maps?q=${encodeURIComponent(key)}&z=15&output=embed`;
     selectedKey=key;
     $('storeMap').title=`Localização de ${store.name} no Google Maps`;
     $('mapStoreName').textContent=`${store.name} · ${store.district || store.city}`;
     $('mapStoreLink').href=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(key)}`;
+    $('mapStoreLink').hidden=false;
+    $('mapRegion').textContent=`${store.city} / ${store.state}`.toUpperCase();
+    if(changed)document.dispatchEvent(new CustomEvent('rio-sul:store-selected',{detail:{store}}));
+  }
+  function clearSelection(){
+    selectedKey=null;
+    $('storeMap').src='https://maps.google.com/maps?q=Rio%20de%20Janeiro%2C%20RJ&z=9&output=embed';
+    $('storeMap').title='Mapa das lojas Rio Sul no Google Maps';
+    $('mapStoreName').textContent='Selecione uma loja';
+    $('mapStoreLink').hidden=true;
+    $('mapRegion').textContent='RIO DE JANEIRO / RJ';
+    document.dispatchEvent(new CustomEvent('rio-sul:store-selected',{detail:{store:null}}));
   }
   function render(){
     const query=normalize($('storeSearch').value.trim());
@@ -22,7 +35,8 @@
     $('storeCount').textContent=`${matches.length} ${matches.length===1?'loja':'lojas'}`;
     $('storesTitle').textContent=position?'Mais próximas de você':'Nossas lojas';
     $('showMore').hidden=matches.length<=limit;
-    if(matches.length&&!matches.some(store=>keyOf(store)===selectedKey))showOnMap(matches[0]);
+    if(query&&selectedKey&&!matches.some(store=>keyOf(store)===selectedKey))clearSelection();
+    if(query&&matches.length===1&&selectedKey!==keyOf(matches[0]))showOnMap(matches[0]);
     $('storesGrid').innerHTML=matches.slice(0,limit).map((store,index)=>{
       const name=escapeHtml(store.name);
       const address=escapeHtml(`${store.address}, ${store.number} · ${store.district}`);
@@ -31,12 +45,12 @@
       const phone=String(store.phone||'').replace(/[^\d+]/g,'');
       const whats=String(store.whatsapp||'').replace(/\D/g,'');
       const selected=selectedKey===keyOf(store);
-      return `<article class="store-card ${selected?'is-selected':''}"><div class="store-index"><span>Unidade ${String(index+1).padStart(2,'0')}</span><span>${position?`${store.distance.toFixed(1).replace('.',',')} km`:`${escapeHtml(store.city)}`}</span></div><h3>${name}</h3><address>${address}<br>${city}</address><div class="store-actions"><button type="button" data-map="${escapeHtml(keyOf(store))}" aria-label="Ver loja ${name} no mapa" ${selected?'aria-current="true"':''}>Ver no mapa ↗</button><a href="${route}" target="_blank" rel="noopener noreferrer" aria-label="Traçar rota para loja ${name}">Traçar rota ↗</a>${phone?`<a href="tel:${phone}">Ligar</a>`:''}${whats?`<a href="https://wa.me/${whats}" target="_blank" rel="noopener noreferrer">WhatsApp</a>`:''}</div></article>`;
+      return `<article class="store-card ${selected?'is-selected':''}"><div class="store-index"><span>Unidade ${String(index+1).padStart(2,'0')}</span><span>${position?`${store.distance.toFixed(1).replace('.',',')} km`:`${escapeHtml(store.city)}`}</span></div><h3>${name}</h3><address>${address}<br>${city}</address><div class="store-actions"><button type="button" data-map="${escapeHtml(keyOf(store))}" aria-label="Explorar loja ${name} no mapa e, quando disponível, na fachada" ${selected?'aria-current="true"':''}>Explorar loja ↗</button><a href="${route}" target="_blank" rel="noopener noreferrer" aria-label="Traçar rota para loja ${name}">Traçar rota ↗</a>${phone?`<a href="tel:${phone}">Ligar</a>`:''}${whats?`<a href="https://wa.me/${whats}" target="_blank" rel="noopener noreferrer">WhatsApp</a>`:''}</div></article>`;
     }).join('')||'<p class="empty-message">Nenhuma loja encontrada. Tente outra cidade ou bairro.</p>';
   }
   async function init(){try{const response=await fetch(API);if(!response.ok)throw Error('API indisponível');stores=await response.json();$('locatorStatus').textContent='Dados atualizados do site oficial. Toque em “Usar minha localização” para ver as lojas mais próximas.';}catch(_){try{const response=await fetch('stores.json');if(!response.ok)throw Error('Cadastro indisponível');stores=await response.json();$('locatorStatus').textContent='Mostrando o cadastro de lojas salvo em 25/09/2026.';}catch(error){$('locatorStatus').textContent='Não foi possível carregar as lojas. Atualize a página.';return;}}stores=stores.filter(store=>Number.isFinite(Number(store.lat))&&Number.isFinite(Number(store.lng))&&store.name);render();}
   $('storeSearch').addEventListener('input',()=>{limit=9;render();});$('showMore').addEventListener('click',()=>{limit+=12;render();});
   $('storesGrid').addEventListener('click',event=>{const button=event.target.closest('[data-map]');if(!button)return;const store=stores.find(item=>keyOf(item)===button.dataset.map);if(!store)return;showOnMap(store);render();document.querySelector('.map-stage').scrollIntoView({behavior:'smooth',block:'center'});});
-  $('locateMe').addEventListener('click',()=>{if(!navigator.geolocation){$('locatorStatus').textContent='Seu navegador não oferece localização. Busque por cidade ou bairro.';return;}$('locatorStatus').textContent='Solicitando sua localização ao navegador...';navigator.geolocation.getCurrentPosition(({coords})=>{position={lat:coords.latitude,lng:coords.longitude};for(const store of stores)store.distance=distance(position.lat,position.lng,Number(store.lat),Number(store.lng));limit=9;$('locatorStatus').textContent='Lojas ordenadas pela distância aproximada em linha reta. Sua posição não é salva pelo site.';render();},()=>{$('locatorStatus').textContent='Não foi possível acessar sua localização. Você pode buscar por cidade, bairro ou rua.';},{enableHighAccuracy:false,timeout:12000,maximumAge:300000});});
+  $('locateMe').addEventListener('click',()=>{if(!navigator.geolocation){$('locatorStatus').textContent='Seu navegador não oferece localização. Busque por cidade ou bairro.';return;}$('locatorStatus').textContent='Solicitando sua localização ao navegador...';navigator.geolocation.getCurrentPosition(({coords})=>{position={lat:coords.latitude,lng:coords.longitude};for(const store of stores)store.distance=distance(position.lat,position.lng,Number(store.lat),Number(store.lng));limit=9;$('locatorStatus').textContent='Lojas ordenadas pela distância aproximada em linha reta. Sua posição não é salva pelo site.';if(stores.length)showOnMap(stores.reduce((nearest,store)=>store.distance<nearest.distance?store:nearest,stores[0]));render();},()=>{$('locatorStatus').textContent='Não foi possível acessar sua localização. Você pode buscar por cidade, bairro ou rua.';},{enableHighAccuracy:false,timeout:12000,maximumAge:300000});});
   init();
 })();
